@@ -33,6 +33,7 @@ export default class Order {
     @ManyToOne(() => Company, company => company, {
         cascade: ['insert', 'update']
     })
+    @JoinColumn({ name: 'id_company' })
     company: Company;
 
     @Column({name: "created_at"})

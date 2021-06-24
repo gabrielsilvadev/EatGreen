@@ -23,12 +23,13 @@ export default class Product {
   category: string;
 
   @OneToMany(() => Images, images => images.product, { cascade: ['insert', 'update'] })
-  @JoinColumn({ name: "id_products" })
+  @JoinColumn({ name: "id_product" })
   images: Images[];
 
   @ManyToOne(() => Company, company => company, {
     cascade: ['insert', 'update']
   })
+  @JoinColumn({ name: "id_company" })
   company: Company;
 
   @OneToMany(() => ProductOrders, productOrders => productOrders, { cascade: ['insert', 'update'] })

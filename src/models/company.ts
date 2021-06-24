@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, OneToOne} from 'typeorm';
 import  Product  from "../models/product";
-import Images from "../models/image"
+import Adress from "./adress";
 import Order from "../models/order";
 @Entity('company')
 export default class User {
@@ -21,7 +21,7 @@ export default class User {
 
     password:string;
     
-    @Column()
+    @Column({unique: true})
 
     email:string;
     
@@ -35,26 +35,15 @@ export default class User {
     @Column({nullable:  true  ,name: 'password_reset_expire'})
     passwordResetExpire: Date;
     
-    @Column()
-    adress: string;
-    
-    @Column()
-    city: string;
+    @OneToOne(()=> Adress, adress=> adress)
+    @JoinColumn({name: 'id_adress'})
+    adress?: Adress
 
-    @Column()
-    states: string;
-
-    @Column()
-    cep: string
-    
     @OneToMany(()=> Product, product => product)
     @JoinColumn({name: 'id_product'})
     product: Product[];
 
-    @OneToMany(()=> Images, images => images)
-    @JoinColumn({name: 'id_images'})
-    images: Images[]
-
+ 
     @OneToMany(()=> Order, Order => Order)
     @JoinColumn({name: 'id_order'})
     Order: Order[];

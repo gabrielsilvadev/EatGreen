@@ -27,7 +27,7 @@ export default {
     }
     const saveUser = userRepository.create(date)
     try {
-      const schema = Yup.object().shape({
+     /* const schema = Yup.object().shape({
         name: Yup.string().required(),
         sobrename: Yup.string().required(),
         email: Yup.string().required(),
@@ -37,7 +37,7 @@ export default {
       })
       await schema.validate(saveUser, {
         abortEarly: false,
-      })
+      })*/
       await userRepository.save(saveUser)
       const token = jwt.sign({ id: saveUser.id }, '647431b5ca55b04fdf3c2fce31ef1915', {
         expiresIn: 86400
@@ -153,7 +153,7 @@ export default {
   async updateUser(request: Request, response: Response) {
     const idUser = request.params.id
     const getUserRepository = getRepository(User)
-    
+
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       sobrename: Yup.string().required(),
@@ -178,7 +178,7 @@ export default {
 
     try {
       const UpdateByUser = await getAdress.findOneOrFail(idAdress)
-      
+
       await getAdress.update(idAdress, request.body)
       return response.status(200).json(UpdateByUser)
     } catch (err) {
