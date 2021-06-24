@@ -8,11 +8,23 @@ import bcrypt from 'bcryptjs';
 import Adress from "../models/adress"
 import Order from "../models/order";
 import crypto from 'crypto';
+
 import Yup from "yup";
 
 export default {
   async createCompany(request: Request, response: Response) {
     const repositoryCompany = getRepository(Company)
+    const repositoryAdress = getRepository(Adress)
+
+    const adress = {
+      adress: request.body.adress,
+      cep: request.body.cep,
+      complement: request.body.complement,
+      city: request.body.city,
+      states: request.body.states,
+    }
+    const saveAdress = repositoryAdress.create(adress)
+    await repositoryAdress.save(saveAdress)
 
     const createObjectProduct = {
       name: request.body.name,
@@ -20,27 +32,24 @@ export default {
       password: request.body.password,
       email: request.body.email,
       telephone: request.body.telephone,
-      adress: {
-        adress: request.body.adress,
-        cep: request.body.cep,
-        complement: request.body.complement,
-        city: request.body.city,
-        states: request.body.states
-      }
+      adress: saveAdress
 
     }
 
     const saveCompany = repositoryCompany.create(createObjectProduct)
+
     const token = jwt.sign({ id: saveCompany.id }, '647431b5ca55b04fdf3c2fce31ef1915', {
       expiresIn: 86400
     })
     try {
       await repositoryCompany.save(saveCompany)
+
       return response.status(200).json({ company: saveCompany, token: token })
     } catch (err) {
       return response.status(500).json({ err: err })
     }
   },
+
   async updateCompany(response: Response, request: Request) {
     const idCompany = request.params.id;
     const repositoryCompany = getRepository(Company)
@@ -55,14 +64,14 @@ export default {
   async authCompany(request: Request, response: Response) {
     const { email, password, conected } = request.body
     const getRepositoryCompany = getRepository(Company)
-
+   
     try {
-      const findCompany = await getRepositoryCompany.findOne({ email: email })
+      const findCompany = await getRepositoryCompany.findOneOrFail({email: email})
       if (!findCompany) {
         return response.status(404).send({ err: 'Company or User not exists' })
       }
-
-      if (!await bcrypt.compare(password, findCompany.password)) {
+     
+      if (await bcrypt.compare(password, findCompany.password)) {
         return response.status(400).send({ err: 'Invalid password' })
       }
       const token = jwt.sign({ id: findCompany.id }, '647431b5ca55b04fdf3c2fce31ef1915', {
@@ -126,12 +135,12 @@ export default {
   },
   async getOrders(request: Request, response: Response) {
     const idCompany = request.params.id
-    const getRepositoryCompany = getRepository(Company)
+    const getRepositoryOrder = getRepository(Order)
     try {
-     
-      const OrderByUser = await getRepositoryCompany.findOneOrFail(idCompany, { relations: ['order'] })
 
-      return response.status(200).json({ order: [OrderByUser]})
+      const OrderByUsers = await getRepositoryOrder.findOne(idCompany, { relations: ['user'] })
+
+      return response.status(200).json({ order: [OrderByUsers] })
     } catch (err) {
       return response.status(500).json({ err: err })
     }

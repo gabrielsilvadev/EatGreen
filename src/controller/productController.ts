@@ -1,15 +1,15 @@
 import { Request, Response } from 'express'
 import { getRepository } from 'typeorm'
 import Product from '../models/product'
-
+import Company from "../models/company";
 
 export default {
 
   async createProduct(request: Request, response: Response) {
     const productRepository = getRepository(Product)
-
+    const companyRepository = getRepository(Company)
     const requestImage = request.files as Express.Multer.File[];
-
+    const findCompany = await companyRepository.findOneOrFail(request.params.id)
     const images = requestImage.map(image => {
       return { path: image.filename }
     });
@@ -19,6 +19,7 @@ export default {
       name: request.body.name,
       price: request.body.price,
       category: request.body.category,
+      company: findCompany,
       images: images
     }
     const product = productRepository.create(createObjectProduct)
@@ -65,11 +66,23 @@ export default {
   },
   async getProduct(request: Request, response: Response){
     const getRepositoryProduct = getRepository(Product)
-    const id:string = request.params.id
+    const category:string = request.params.category
     
     try{
-     const productId = await getRepositoryProduct.findOneOrFail(id, {relations: ['images']})
-     return response.status(200).json(productId)
+     const productCategory = await getRepositoryProduct.findOneOrFail({category: category}, {relations: ['images']})
+     return response.status(200).json(productCategory)
+    }catch(err){
+     return response.status(500).json({er: err})
+    }
+  },
+  
+  async getProductByCompany(request: Request, response: Response){
+    const getRepositoryProduct = getRepository(Product)
+    const company_id = request.params.id_company
+    
+    try{
+      let productCategory = await getRepositoryProduct.findOneOrFail({relations: ['images']})
+      return response.status(200).json(productCategory)
     }catch(err){
      return response.status(500).json({er: err})
     }

@@ -5,18 +5,21 @@ import ControllerProduct from './controller/productController';
 import ControllerUser from './controller/UserController'
 import ControllerCompany from './controller/companyController';
 import middlewareUser from './middleware/alphaUser'
-import middlewareCompany from "./middleware/alphaCompany";
+
 const routes = Router();
 const upload = multer(uploadConfig);
 
-routes.post('/product/create/', upload.array('images'), ControllerProduct.createProduct);
+routes.post('/company/create', ControllerCompany.createCompany)
+routes.post('/company/auth', ControllerCompany.authCompany)
+
+routes.post('/product/create/:id', upload.array('images'), ControllerProduct.createProduct);
 routes.patch('/product/upload/:id', ControllerProduct.updateProduct)
 routes.delete("/product/delete/:id", ControllerProduct.deleteProduct)
 
 
-routes.get('/product/:id', ControllerProduct.getProduct)
+routes.get('/product/category/:category', ControllerProduct.getProduct)
 routes.get("/product/all/", ControllerProduct.getAllProduct)
-routes.post('company/create', ControllerCompany.createCompany)
+routes.get("/company/product/:id_company", ControllerProduct.getProductByCompany)
 
 // autetication
 routes.post("/user/auth/", ControllerUser.authUser)
