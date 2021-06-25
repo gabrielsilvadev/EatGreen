@@ -9,17 +9,9 @@ import middlewareUser from './middleware/alphaUser'
 const routes = Router();
 const upload = multer(uploadConfig);
 
-routes.post('/company/create', ControllerCompany.createCompany)
-routes.post('/company/auth', ControllerCompany.authCompany)
-
-routes.post('/product/create/:id', upload.array('images'), ControllerProduct.createProduct);
-routes.patch('/product/upload/:id', ControllerProduct.updateProduct)
-routes.delete("/product/delete/:id", ControllerProduct.deleteProduct)
-
-
 routes.get('/product/category/:category', ControllerProduct.getProduct)
 routes.get("/product/all/", ControllerProduct.getAllProduct)
-routes.get("/company/product/:id_company", ControllerProduct.getProductByCompany)
+
 
 // autetication
 routes.post("/user/auth/", ControllerUser.authUser)
@@ -27,6 +19,10 @@ routes.post('/user/forgot', ControllerUser.forgot)
 routes.post('/user/reset/password', ControllerUser.resetPassword)
 routes.post('/user/validation', ControllerUser.validationUser)
 routes.post("/user/create/", ControllerUser.createUser)
+
+routes.post('/company/create', ControllerCompany.createCompany)
+routes.post('/company/auth', ControllerCompany.authCompany)
+
 
 //user
 routes.use(middlewareUser)
@@ -41,6 +37,16 @@ routes.delete("user/adress/delete", ControllerUser.deleteAdress)
 
 
 //admin
+routes.get("/company/orders/:id_company", ControllerCompany.getOrders)
+routes.post("/company/reset_password", ControllerCompany.resetPassword)
+routes.post("/company/forgot", ControllerCompany.forgot)
+routes.patch("/company/update/:id", ControllerCompany.updateCompany)
+
+routes.get("/company/product/:id_company", ControllerProduct.getProductByCompany)
+
+routes.post('/product/create/:id', upload.array('images'), ControllerProduct.createProduct);
+routes.patch('/product/upload/:id', ControllerProduct.updateProduct)
+routes.delete("/product/delete/:id", ControllerProduct.deleteProduct)
 
 
 

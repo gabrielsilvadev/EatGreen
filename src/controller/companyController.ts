@@ -138,7 +138,7 @@ export default {
     const getRepositoryOrder = getRepository(Order)
     try {
 
-      const OrderByUsers = await getRepositoryOrder.findOne(idCompany, { relations: ['user'] })
+      const OrderByUsers = await getRepositoryOrder.find({where: {company: idCompany}})
 
       return response.status(200).json({ order: [OrderByUsers] })
     } catch (err) {

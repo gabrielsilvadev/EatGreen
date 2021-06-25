@@ -81,7 +81,7 @@ export default {
     const company_id = request.params.id_company
     
     try{
-      let productCategory = await getRepositoryProduct.findOneOrFail({relations: ['images']})
+      let productCategory = await getRepositoryProduct.find({where:{company: company_id}})
       return response.status(200).json(productCategory)
     }catch(err){
      return response.status(500).json({er: err})
