@@ -35,7 +35,6 @@ routes.patch("/user/update/:id", ControllerUser.updateUser)
 routes.patch("/user/adress/update/:id", ControllerUser.updateAdress)
 routes.delete("user/adress/delete", ControllerUser.deleteAdress)
 
-
 //admin
 routes.get("/company/orders/:id_company", ControllerCompany.getOrders)
 routes.post("/company/reset_password", ControllerCompany.resetPassword)
