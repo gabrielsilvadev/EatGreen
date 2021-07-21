@@ -9,7 +9,7 @@ import middlewareUser from './middleware/alphaUser'
 const routes = Router();
 const upload = multer(uploadConfig);
 
-routes.get('/product/category/:category', ControllerProduct.getProduct)
+/*routes.get('/product/category/:category', ControllerProduct.getProduct)*/
 routes.get("/product/all/", ControllerProduct.getAllProduct)
 
 
@@ -25,7 +25,7 @@ routes.post('/company/auth', ControllerCompany.authCompany)
 
 
 //user
-routes.use(middlewareUser)
+/*routes.use(middlewareUser)*/
 routes.post('/user/create/order/:id', ControllerUser.createOrder)
 routes.post("/user/create/adress/:id/", ControllerUser.createAdressByuser)
 routes.get("/user/:id", ControllerUser.getUser)
@@ -40,6 +40,7 @@ routes.get("/company/orders/:id_company", ControllerCompany.getOrders)
 routes.post("/company/reset_password", ControllerCompany.resetPassword)
 routes.post("/company/forgot", ControllerCompany.forgot)
 routes.patch("/company/update/:id", ControllerCompany.updateCompany)
+routes.patch("/company/status/:status/:id", ControllerUser.upgradeOrderStatus)
 
 routes.get("/company/product/:id_company", ControllerProduct.getProductByCompany)
 

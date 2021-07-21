@@ -139,6 +139,22 @@ export default {
       return response.status(500).json({ err: err })
     }
   },
+
+  async upgradeOrderStatus(request: Request, response: Response) {
+    const idOrder = request.params.id
+    const status = request.params.status
+    const getOrderRepository = getRepository(Order)
+  
+    try {
+     
+      const OrderByUser = await getOrderRepository.update(idOrder, {orderStatus: status})
+
+      return response.status(200).json({ order: [OrderByUser] })
+    } catch (err) {
+      return response.status(500).json({ err: err })
+    }
+  },
+
   async deleteOrder(request: Request, response: Response) {
     const idOrder = request.params.id
     const getOrderRepository = getRepository(Order)

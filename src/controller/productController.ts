@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { getRepository } from 'typeorm'
 import Product from '../models/product'
 import Company from "../models/company";
-
+import ProductView from "../views/product_view"
 export default {
 
   async createProduct(request: Request, response: Response) {
@@ -59,12 +59,14 @@ export default {
       const findProduct = await getRepositoryProduct.find({
         relations: ['images']
       })
-      return response.status(200).json(findProduct)
+      console.log(findProduct)
+
+      return response.status(200).json(ProductView.renderMany(findProduct))
     } catch (err) {
       return response.status(500).json({ err: err})
     }
   },
-  async getProduct(request: Request, response: Response){
+ /* async getProduct(request: Request, response: Response){
     const getRepositoryProduct = getRepository(Product)
     const category:string = request.params.category
     
@@ -74,7 +76,7 @@ export default {
     }catch(err){
      return response.status(500).json({er: err})
     }
-  },
+  },*/
   
   async getProductByCompany(request: Request, response: Response){
     const getRepositoryProduct = getRepository(Product)
