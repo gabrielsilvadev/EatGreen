@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import { getRepository } from 'typeorm'
 import Product from '../models/product'
+import ViewProduct from"../views/product_view"
 import Company from "../models/company";
-import ProductView from "../views/product_view"
+
 export default {
 
   async createProduct(request: Request, response: Response) {
@@ -10,8 +11,9 @@ export default {
     const companyRepository = getRepository(Company)
     const requestImage = request.files as Express.Multer.File[];
     const findCompany = await companyRepository.findOneOrFail(request.params.id)
-    const images = requestImage.map(image => {
-      return { path: image.filename }
+   const images = requestImage.map(image => {
+      return { path:  image.path }
+    
     });
 
    
@@ -61,7 +63,7 @@ export default {
       })
       console.log(findProduct)
 
-      return response.status(200).json(ProductView.renderMany(findProduct))
+      return response.status(200).json(findProduct)
     } catch (err) {
       return response.status(500).json({ err: err})
     }
