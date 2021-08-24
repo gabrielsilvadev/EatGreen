@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { getRepository } from 'typeorm'
 import Product from '../models/product'
-import ViewProduct from"../views/product_view"
 import Company from "../models/company";
+import fs from "fs";
 
 export default {
 
@@ -12,11 +12,10 @@ export default {
     const requestImage = request.files as Express.Multer.File[];
     const findCompany = await companyRepository.findOneOrFail(request.params.id)
    const images = requestImage.map(image => {
-      return { path:  image.path }
+      return { path:  fs.readFileSync(image.path, "base64") }
     
     });
 
-   
     const createObjectProduct = {
       name: request.body.name,
       price: request.body.price,
@@ -59,7 +58,7 @@ export default {
     const getRepositoryProduct = getRepository(Product)
     try {
       const findProduct = await getRepositoryProduct.find({
-        relations: ['images']
+        relations: ['images', 'company']
       })
       console.log(findProduct)
 

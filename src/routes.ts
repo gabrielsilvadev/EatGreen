@@ -1,11 +1,13 @@
 import { Router } from 'express';
-
+import multer from 'multer';
+import uploadConfig from './config/config'
 import ControllerProduct from './controller/productController';
 import ControllerUser from './controller/UserController'
 import ControllerCompany from './controller/companyController';
 import middlewareUser from './middleware/alphaUser'
 
 const routes = Router();
+const upload = multer(uploadConfig);
 
 /*routes.get('/product/category/:category', ControllerProduct.getProduct)*/
 routes.get("/product/all/", ControllerProduct.getAllProduct)
@@ -42,7 +44,7 @@ routes.patch("/company/status/:status/:id", ControllerUser.upgradeOrderStatus)
 
 routes.get("/company/product/:id_company", ControllerProduct.getProductByCompany)
 
-routes.post('/product/create/:id', ControllerProduct.createProduct);
+routes.post('/product/create/:id', upload.array('images'), ControllerProduct.createProduct);
 routes.patch('/product/upload/:id', ControllerProduct.updateProduct)
 routes.delete("/product/delete/:id", ControllerProduct.deleteProduct)
 

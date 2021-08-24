@@ -9,7 +9,6 @@ import Adress from "../models/adress"
 import Order from "../models/order";
 import crypto from 'crypto';
 
-import Yup from "yup";
 
 export default {
   async createCompany(request: Request, response: Response) {
