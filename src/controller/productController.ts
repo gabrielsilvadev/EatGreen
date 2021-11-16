@@ -60,8 +60,7 @@ export default {
       const findProduct = await getRepositoryProduct.find({
         relations: ['images', 'company']
       })
-      console.log(findProduct)
-
+      
       return response.status(200).json(findProduct)
     } catch (err) {
       return response.status(500).json({ err: err})

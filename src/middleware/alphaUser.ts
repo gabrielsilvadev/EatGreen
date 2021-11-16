@@ -4,7 +4,6 @@ const auth = require('../config/autha.json')
 
 export default  (request: Request,response: Response,next: NextFunction)=>{
     const authheadrs = request.headers.authorization;
-    
     if(!authheadrs)
     return response.status(401).send({err:'error'})
 

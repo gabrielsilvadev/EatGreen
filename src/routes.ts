@@ -25,11 +25,11 @@ routes.post('/company/auth', ControllerCompany.authCompany)
 
 
 //user
-/*routes.use(middlewareUser)*/
-routes.post('/user/create/order/:id', ControllerUser.createOrder)
-routes.post("/user/create/adress/:id/", ControllerUser.createAdressByuser)
+routes.use(middlewareUser)
+routes.post("/user/create/order/:id", ControllerUser.test)
+routes.post("/user/create/adress/:id", ControllerUser.createAdressByuser)
 routes.get("/user/:id", ControllerUser.getUser)
-routes.get("/user/getOrder/:id/:idAdress", ControllerUser.getOrder)
+routes.get("/user/getOrderAll/:id", ControllerUser.getOrderAll)
 routes.delete("/user/deleteOrder/:id", ControllerUser.deleteOrder)
 routes.patch("/user/update/:id", ControllerUser.updateUser)
 routes.patch("/user/adress/update/:id", ControllerUser.updateAdress)

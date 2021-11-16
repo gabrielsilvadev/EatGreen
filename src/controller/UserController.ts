@@ -49,7 +49,6 @@ export default {
   },
   async createAdressByuser(request: Request, response: Response) {
     const id: string = request.params.id
-
     const userRepository = getRepository(User)
     const adressRepository = getRepository(Adress)
     const findUser = await userRepository.findOneOrFail(id, { relations: ['adress'] })
@@ -93,7 +92,8 @@ export default {
     const findUser = await userRepository.findOneOrFail(id, { relations: ['adress'] })
     return response.status(200).json(findUser)
   },
-  async createOrder(request: Request, response: Response) {
+  /*async createOrder(request: Request, response: Response) {
+    console.log(request.body)
     const repositoryOrder = getRepository(Order)
     const repositoryOrderProduct = getRepository(OrderProduct)
     const getRepositoryUser = getRepository(User)
@@ -106,7 +106,6 @@ export default {
     }
     const saveOrder = repositoryOrder.create(order)
     const createOrder = await repositoryOrder.save(saveOrder)
-
 
     for (let ProductOrder of request.body.products) {
       let orderProduct = {
@@ -124,21 +123,17 @@ export default {
       }
     }
 
+  },*/
+  async test(request: Request, response: Response){
+   return response.status(200).json(request.body)
   },
-  async getOrder(request: Request, response: Response) {
-    const idOrder = request.params.id
-    const idAdress = request.params.idAdress
-    const getOrderRepository = getRepository(Order)
-    const getAdressRepository = getRepository(Adress)
-    try {
-      const findAdress = await getAdressRepository.findOneOrFail({ id: idAdress })
-      const OrderByUser = await getOrderRepository.findOneOrFail(idOrder, { relations: ['user'] })
+  async getOrderAll(request: Request, response: Response) {
+    const id = request.params.id
+    const userRepository = getRepository(User)
+    const findUser = await userRepository.findOneOrFail(id, { relations: ['order', 'adress'] })
+    return response.status(200).json(findUser)
+  },
 
-      return response.status(200).json({ order: [OrderByUser], adress: findAdress })
-    } catch (err) {
-      return response.status(500).json({ err: err })
-    }
-  },
 
   async upgradeOrderStatus(request: Request, response: Response) {
     const idOrder = request.params.id
