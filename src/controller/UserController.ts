@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken'
 
 import Order from "../models/order";
 import OrderProduct from "../models/product_orders"
-
+import Company from "../models/company"
 export default {
   async createUser(request: Request, response: Response) {
     const userRepository = getRepository(User)
@@ -47,7 +47,46 @@ export default {
       return response.status(406).json({ err: err })
     }
   },
-  async createAdressByuser(request: Request, response: Response) {
+
+  async createOrderByuser(request: Request, response: Response) {
+
+    const repositoryOrder = getRepository(Order)
+    const repositoryOrderProduct = getRepository(OrderProduct)
+    const repositoryCompany  = getRepository(Company)
+    const getRepositoryUser = getRepository(User)
+    const user = await getRepositoryUser.findOneOrFail(request.params.id, { relations: ['adress'] })
+    const company = await repositoryCompany.findOneOrFail(request.body.id_company)
+    const order = {
+      orderStatus: request.body.orderStatus,
+      formOfPayment: request.body.formOfPayment,
+      priceTotal: request.body.priceTotal,
+      createdAt: new Date(),
+      company:  company,
+      user: user
+    }
+    const saveOrder = repositoryOrder.create(order)
+    const createOrder = await repositoryOrder.save(saveOrder)
+
+    for (let ProductOrder of request.body.products) {
+      let orderProduct = {
+        quantityProductsOrdered: ProductOrder.quanty,
+        order: createOrder,
+        priceUnitary: ProductOrder.priceUnitary,
+        product: ProductOrder.id
+      }
+      try {
+        const saveOrderProduct = repositoryOrderProduct.create(orderProduct)
+        await repositoryOrderProduct.save(saveOrderProduct)
+        response.status(201).json(saveOrderProduct)
+      } catch (err) {
+        response.status(500).json({ message: err })
+      }
+    }
+
+  },
+
+  async createAdress(request: Request, response: Response) {
+   
     const id: string = request.params.id
     const userRepository = getRepository(User)
     const adressRepository = getRepository(Adress)
@@ -86,54 +125,6 @@ export default {
     return response.status(201).json(adress)
 
   },
-  async getUser(request: Request, response: Response) {
-    const id = request.params.id
-    const userRepository = getRepository(User)
-    const findUser = await userRepository.findOneOrFail(id, { relations: ['adress'] })
-    return response.status(200).json(findUser)
-  },
-  /*async createOrder(request: Request, response: Response) {
-    console.log(request.body)
-    const repositoryOrder = getRepository(Order)
-    const repositoryOrderProduct = getRepository(OrderProduct)
-    const getRepositoryUser = getRepository(User)
-    const user = await getRepositoryUser.findOneOrFail(request.params.id, { relations: ['adress'] })
-    const order = {
-      orderStatus: request.body.orderStatus,
-      formOfPayment: request.body.formOfPayment,
-      priceTotal: request.body.priceTotal,
-      user: user
-    }
-    const saveOrder = repositoryOrder.create(order)
-    const createOrder = await repositoryOrder.save(saveOrder)
-
-    for (let ProductOrder of request.body.products) {
-      let orderProduct = {
-        quantityProductsOrdered: ProductOrder.quanty,
-        order: createOrder,
-        priceUnitary: ProductOrder.priceUnitary,
-        product: ProductOrder.id
-      }
-      try {
-        const saveOrderProduct = repositoryOrderProduct.create(orderProduct)
-        await repositoryOrderProduct.save(saveOrderProduct)
-        response.status(201).json(saveOrderProduct)
-      } catch (err) {
-        response.status(500).json({ message: err })
-      }
-    }
-
-  },*/
-  async test(request: Request, response: Response){
-   return response.status(200).json(request.body)
-  },
-  async getOrderAll(request: Request, response: Response) {
-    const id = request.params.id
-    const userRepository = getRepository(User)
-    const findUser = await userRepository.findOneOrFail(id, { relations: ['order', 'adress'] })
-    return response.status(200).json(findUser)
-  },
-
 
   async upgradeOrderStatus(request: Request, response: Response) {
     const idOrder = request.params.id
@@ -213,7 +204,8 @@ export default {
     const getRepositoryUser = getRepository(User)
 
     try {
-      const findUser = await getRepositoryUser.findOne({ email: email })
+      const findUser = await getRepositoryUser.findOneOrFail(email,{relations: ['order', 'adress']})
+      console.log(findUser)
       if (!findUser) {
         return response.status(404).send({ err: 'User not exists' })
       }

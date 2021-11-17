@@ -66,17 +66,7 @@ export default {
       return response.status(500).json({ err: err})
     }
   },
- /* async getProduct(request: Request, response: Response){
-    const getRepositoryProduct = getRepository(Product)
-    const category:string = request.params.category
-    
-    try{
-     const productCategory = await getRepositoryProduct.findOneOrFail({category: category}, {relations: ['images']})
-     return response.status(200).json(productCategory)
-    }catch(err){
-     return response.status(500).json({er: err})
-    }
-  },*/
+
   
   async getProductByCompany(request: Request, response: Response){
     const getRepositoryProduct = getRepository(Product)

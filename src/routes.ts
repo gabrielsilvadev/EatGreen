@@ -26,15 +26,14 @@ routes.post('/company/auth', ControllerCompany.authCompany)
 
 //user
 routes.use(middlewareUser)
-routes.post("/user/create/order/:id", ControllerUser.test)
-routes.post("/user/create/adress/:id", ControllerUser.createAdressByuser)
-routes.get("/user/:id", ControllerUser.getUser)
-routes.get("/user/getOrderAll/:id", ControllerUser.getOrderAll)
+
+routes.post("/user/create/order/:id", ControllerUser.createOrderByuser)
 routes.delete("/user/deleteOrder/:id", ControllerUser.deleteOrder)
 routes.patch("/user/update/:id", ControllerUser.updateUser)
 routes.patch("/user/adress/update/:id", ControllerUser.updateAdress)
 routes.delete("user/adress/delete", ControllerUser.deleteAdress)
 
+routes.post("/user/create/adress/:id", ControllerUser.createAdress)
 //admin
 routes.get("/company/orders/:id_company", ControllerCompany.getOrders)
 routes.post("/company/reset_password", ControllerCompany.resetPassword)
