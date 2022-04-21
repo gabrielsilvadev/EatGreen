@@ -1,0 +1,9 @@
+{
+    "trailingComma": "none",
+    "printWidth": 160,
+    "semi": true,
+    "singleQuote": false,
+    "htmlWhitespaceSensitivity": "ignore",
+    "bracketSpacing": true,
+    "bracketSameLine": false
+  }

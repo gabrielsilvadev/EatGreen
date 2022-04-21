@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, ManyToOne } from 'typeorm';
-import Images from './image'
-import Company from "../models/company"
-import ProductOrders from './product_orders'
+import Images from './Image'
+import Company from "../entities/Company"
+import ProductOrders from './Product_orders'
 
 @Entity('product')
 export default class Product {

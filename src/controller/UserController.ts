@@ -152,6 +152,20 @@ export default {
       return response.status(500).json({ err: err })
     }
   },
+
+  async getOrder(request: Request, response: Response){
+    const idUser = request.params.id
+    const getUserRepository = getRepository(User)
+    const getCompanyByOrder = getRepository(Order)
+    try{
+      const order = await getUserRepository.findOneOrFail(idUser,{relations:['order']})
+      const company = await getCompanyByOrder.findOneOrFail(order.order[0].id, {relations:['company']})
+      console.log(order)
+      return response.status(200).json({order: order.order, company})
+    }catch(err){
+      return response.status(500).json({ err: err })
+    }
+  },
   async updateUser(request: Request, response: Response) {
     const idUser = request.params.id
     const getUserRepository = getRepository(User)
@@ -204,7 +218,7 @@ export default {
     const getRepositoryUser = getRepository(User)
 
     try {
-      const findUser = await getRepositoryUser.findOneOrFail(email,{relations: ['order', 'adress']})
+      const findUser = await getRepositoryUser.findOneOrFail({email: email})
       console.log(findUser)
       if (!findUser) {
         return response.status(404).send({ err: 'User not exists' })
