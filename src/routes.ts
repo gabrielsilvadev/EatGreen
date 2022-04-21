@@ -32,7 +32,7 @@ routes.delete("/user/deleteOrder/:id", ControllerUser.deleteOrder)
 routes.patch("/user/update/:id", ControllerUser.updateUser)
 routes.patch("/user/adress/update/:id", ControllerUser.updateAdress)
 routes.delete("user/adress/delete", ControllerUser.deleteAdress)
-
+routes.get("/user/order/:id", ControllerUser.getOrder)
 routes.post("/user/create/adress/:id", ControllerUser.createAdress)
 //admin
 routes.get("/company/orders/:id_company", ControllerCompany.getOrders)

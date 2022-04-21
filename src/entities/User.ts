@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
-import Adress from './adress'
-import Order from './order'
+import Adress from './Adress'
+import Order from './Order'
 
 @Entity('user')
 export default class User {
