@@ -1,13 +1,13 @@
-import Images from '../entities/Image'
-import Company from "../entities/Company"
-import ProductOrders from '../entities/Product_orders'
+import { ImagesInteface } from './image.interface'
+import { CompanyInterface } from "./company.interface"
+import { ProductOrderInterface } from './product_orders.interface'
 
-export interface Product {
+export interface ProductInterface {
   name: string;
   price: number;
   category: string;
-  images: Images[];
-  company: Company;
-  productOrders: ProductOrders[]
+  images: ImagesInteface[];
+  company: CompanyInterface;
+  productOrders: ProductOrderInterface[]
 
 }

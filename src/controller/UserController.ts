@@ -11,8 +11,8 @@ import jwt from 'jsonwebtoken'
 import Order from "../models/order";
 import OrderProduct from "../models/product_orders"
 import Company from "../models/company"
-export default {
-  async createUser(request: Request, response: Response) {
+export default class UserController {
+  async create(request: Request, response: Response) {
     const userRepository = getRepository(User)
     const password = request.body.password
     const hash = await bcrypt.hash(password, 10)
@@ -27,17 +27,17 @@ export default {
     }
     const saveUser = userRepository.create(date)
     try {
-     /* const schema = Yup.object().shape({
-        name: Yup.string().required(),
-        sobrename: Yup.string().required(),
-        email: Yup.string().required(),
-        telephone: Yup.number().required().max(11),
-        cpf: Yup.number().required().max(11),
-        password: Yup.string().required(),
-      })
-      await schema.validate(saveUser, {
-        abortEarly: false,
-      })*/
+      /* const schema = Yup.object().shape({
+         name: Yup.string().required(),
+         sobrename: Yup.string().required(),
+         email: Yup.string().required(),
+         telephone: Yup.number().required().max(11),
+         cpf: Yup.number().required().max(11),
+         password: Yup.string().required(),
+       })
+       await schema.validate(saveUser, {
+         abortEarly: false,
+       })*/
       await userRepository.save(saveUser)
       const token = jwt.sign({ id: saveUser.id }, '647431b5ca55b04fdf3c2fce31ef1915', {
         expiresIn: 86400
@@ -52,7 +52,7 @@ export default {
 
     const repositoryOrder = getRepository(Order)
     const repositoryOrderProduct = getRepository(OrderProduct)
-    const repositoryCompany  = getRepository(Company)
+    const repositoryCompany = getRepository(Company)
     const getRepositoryUser = getRepository(User)
     const user = await getRepositoryUser.findOneOrFail(request.params.id, { relations: ['adress'] })
     const company = await repositoryCompany.findOneOrFail(request.body.id_company)
@@ -61,7 +61,7 @@ export default {
       formOfPayment: request.body.formOfPayment,
       priceTotal: request.body.priceTotal,
       createdAt: new Date(),
-      company:  company,
+      company: company,
       user: user
     }
     const saveOrder = repositoryOrder.create(order)
@@ -86,7 +86,7 @@ export default {
   },
 
   async createAdress(request: Request, response: Response) {
-   
+
     const id: string = request.params.id
     const userRepository = getRepository(User)
     const adressRepository = getRepository(Adress)
@@ -130,10 +130,10 @@ export default {
     const idOrder = request.params.id
     const status = request.params.status
     const getOrderRepository = getRepository(Order)
-  
+
     try {
-     
-      const OrderByUser = await getOrderRepository.update(idOrder, {orderStatus: status})
+
+      const OrderByUser = await getOrderRepository.update(idOrder, { orderStatus: status })
 
       return response.status(200).json({ order: [OrderByUser] })
     } catch (err) {
@@ -153,16 +153,16 @@ export default {
     }
   },
 
-  async getOrder(request: Request, response: Response){
+  async getOrder(request: Request, response: Response) {
     const idUser = request.params.id
     const getUserRepository = getRepository(User)
     const getCompanyByOrder = getRepository(Order)
-    try{
-      const order = await getUserRepository.findOneOrFail(idUser,{relations:['order']})
-      const company = await getCompanyByOrder.findOneOrFail(order.order[0].id, {relations:['company']})
+    try {
+      const order = await getUserRepository.findOneOrFail(idUser, { relations: ['order'] })
+      const company = await getCompanyByOrder.findOneOrFail(order.order[0].id, { relations: ['company'] })
       console.log(order)
-      return response.status(200).json({order: order.order, company})
-    }catch(err){
+      return response.status(200).json({ order: order.order, company })
+    } catch (err) {
       return response.status(500).json({ err: err })
     }
   },
@@ -218,7 +218,7 @@ export default {
     const getRepositoryUser = getRepository(User)
 
     try {
-      const findUser = await getRepositoryUser.findOneOrFail({email: email})
+      const findUser = await getRepositoryUser.findOneOrFail({ email: email })
       console.log(findUser)
       if (!findUser) {
         return response.status(404).send({ err: 'User not exists' })

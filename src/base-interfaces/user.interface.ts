@@ -1,5 +1,5 @@
-import Adress from "../entities/Adress"
-import Order from "../entities/Order"
+import { AdressInterface } from "./adress.interface"
+import { OrderInterface } from "./order.interface"
 
 export interface UserInterface {
   first_name: string;
@@ -10,6 +10,6 @@ export interface UserInterface {
   passwordResetToken?: string;
   passwordResetExpire?: Date;
   cpf: string
-  adress?: Adress[];
-  order?: Order[]
+  adress?: AdressInterface[];
+  order?: OrderInterface[]
 }
