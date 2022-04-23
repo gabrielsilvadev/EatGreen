@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import multer from 'multer';
 import uploadConfig from './config/config'
-import ControllerProduct from './controller/productController';
+import ControllerProduct from './controller/ProductController';
 import ControllerUser from './controller/UserController'
-import ControllerCompany from './controller/companyController';
+import ControllerCompany from './controller/CompanyController';
 import middlewareUser from './middleware/alphaUser'
 
 const routes = Router();
