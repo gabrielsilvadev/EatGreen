@@ -3,7 +3,7 @@ import Product from './Product'
 import Order from "./Order";
 
 @Entity('product_orders')
-export default class Adress {
+export default class ProductOrders {
 
   @PrimaryGeneratedColumn('increment')
   id: number;
