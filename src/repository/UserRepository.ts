@@ -14,7 +14,7 @@ class UserRepository extends Repository<User>{
     user.password = passwordHash
     const newUser = this.create(user)
     await this.save(newUser)
-    return user
+    return newUser
   }
 
   async resetPassword(email: string, token: string, password: string) {
@@ -67,7 +67,7 @@ class UserRepository extends Repository<User>{
     const token = jwt.sign({ id: findUser.id }, '647431b5ca55b04fdf3c2fce31ef1915', {
       expiresIn: conected ? 1892160000000 : 86400
     })
-    return { user: findUser, token: token }
+    return Object.assign({},findUser, token )
 
   }
 }

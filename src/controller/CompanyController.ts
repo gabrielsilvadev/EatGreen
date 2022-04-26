@@ -63,13 +63,13 @@ export default {
   async authCompany(request: Request, response: Response) {
     const { email, password, conected } = request.body
     const getRepositoryCompany = getRepository(Company)
-   
+
     try {
-      const findCompany = await getRepositoryCompany.findOneOrFail({email: email})
+      const findCompany = await getRepositoryCompany.findOneOrFail({ email: email })
       if (!findCompany) {
         return response.status(404).send({ err: 'Company or User not exists' })
       }
-     
+
       if (await bcrypt.compare(password, findCompany.password)) {
         return response.status(400).send({ err: 'Invalid password' })
       }
@@ -137,13 +137,14 @@ export default {
     const getRepositoryOrder = getRepository(Order)
     try {
 
-      const OrderByUsers = await getRepositoryOrder.find({where: {company: idCompany}})
+      const OrderByUsers = await getRepositoryOrder.find({ where: { company: idCompany } })
 
       return response.status(200).json({ order: [OrderByUsers] })
     } catch (err) {
       return response.status(500).json({ err: err })
     }
   },
+
 
 
 

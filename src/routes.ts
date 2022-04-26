@@ -1,15 +1,12 @@
 import { Router } from 'express';
-import multer from 'multer';
-import uploadConfig from './config/config'
-import ControllerProduct from './controller/ProductController';
-import ControllerUser from './controller/UserController'
-import ControllerCompany from './controller/CompanyController';
-import middlewareUser from './middleware/alphaUser'
-
+import isAuthenticated from './middleware/alphaUser'
+import userRouters from './router/users/UserRouters';
 const routes = Router();
-const upload = multer(uploadConfig);
+routes.use('/user', userRouters)
 
-/*routes.get('/product/category/:category', ControllerProduct.getProduct)*/
+
+
+/*routes.get('/product/category/:category', ControllerProduct.getProduct)
 routes.get("/product/all/", ControllerProduct.getAllProduct)
 
 
@@ -22,10 +19,10 @@ routes.post("/user/create/", ControllerUser.createUser)
 
 routes.post('/company/create', ControllerCompany.createCompany)
 routes.post('/company/auth', ControllerCompany.authCompany)
-
+*/
 
 //user
-routes.use(middlewareUser)
+/*routes.use(middlewareUser)
 
 routes.post("/user/create/order/:id", ControllerUser.createOrderByuser)
 routes.delete("/user/deleteOrder/:id", ControllerUser.deleteOrder)
@@ -46,7 +43,7 @@ routes.get("/company/product/:id_company", ControllerProduct.getProductByCompany
 routes.post('/product/create/:id', upload.array('images'), ControllerProduct.createProduct);
 routes.patch('/product/upload/:id', ControllerProduct.updateProduct)
 routes.delete("/product/delete/:id", ControllerProduct.deleteProduct)
-
+*/
 
 
 export default routes;
