@@ -143,7 +143,7 @@ export default {
     } catch (err) {
       return response.status(500).json({ err: err })
     }
-  },
+  }
 
 
 
