@@ -2,10 +2,9 @@ import { Request, Response } from "express"
 import UserServices from "../services/users"
 export default class UserController {
   async create(request: Request, response: Response): Promise<Response> {
-    try {
-      console.log(request.body)
       const userData = request.body;
       const createUser = new UserServices.CreateUserService()
+      try{
       const user = await createUser.execute(userData)
       return response.status(200).json(user)
     } catch (err) {

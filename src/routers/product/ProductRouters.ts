@@ -6,8 +6,8 @@ const productController = new controller.ProductController
 
 productRouters.post("/create",isAuthenticated, productController.create)
 productRouters.patch("/delete/:id",isAuthenticated , productController.deleteProduct)
-productRouters.post("/", productController.getAllProduct)
-productRouters.post("/company/:id",isAuthenticated,productController.getProductByCompany)
-productRouters.post("/save",isAuthenticated, productController.updateProduct)
+productRouters.get("/", productController.getAllProduct)
+productRouters.get("/company/:id",isAuthenticated,productController.getProductByCompany)
+productRouters.post("/save/:id",isAuthenticated, productController.updateProduct)
 
 export default productRouters
