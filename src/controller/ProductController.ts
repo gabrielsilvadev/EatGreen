@@ -1,17 +1,16 @@
 import { Request, Response } from 'express'
-import { getRepository } from 'typeorm'
-import Product from '../models/product'
-import Company from "../models/company";
+import ProductServices from '../services/products'
+import CompanyServices from '../services/company'
 import fs from "fs";
 
-export default {
+export default class ProductController {
 
-  async createProduct(request: Request, response: Response) {
-    const productRepository = getRepository(Product)
-    const companyRepository = getRepository(Company)
+  async create(request: Request, response: Response) {
+    const company = new CompanyServices.FindCompanyService()
+    const productRequest = new ProductServices.CreateProductService()
     const requestImage = request.files as Express.Multer.File[];
-    const findCompany = await companyRepository.findOneOrFail(request.params.id)
-   const images = requestImage.map(image => {
+    const findCompany = await company.execute(request.params.id)
+    const images = requestImage.map(image => {
       return { path:  fs.readFileSync(image.path, "base64") }
     
     });
@@ -21,64 +20,59 @@ export default {
       price: request.body.price,
       category: request.body.category,
       company: findCompany,
-      images: images
+      images: images[0]
     }
-    const product = productRepository.create(createObjectProduct)
     try {
-      await productRepository.save(product)
-      return response.status(201).json(product)
+     const newProduct = await  productRequest.execute(createObjectProduct)
+      return response.status(201).json(newProduct)
     } catch (err) {
       return response.status(500).json({ message: err})
     }
 
-  },
+  }
   async updateProduct(request: Request, response: Response) {
-    const productRepository = getRepository(Product)
+    const productRepository =  new ProductServices.SaveProductService()
     const id: string = request.params.id
     try {
-      await productRepository.update(id, request.body)
+      await productRepository.execute(id, request.body)
       return response.status(200).json({ message: `atualizado com sucesso ` })
     } catch (err) {
       return response.status(500).json({ message: err })
     }
 
-  },
+  }
   async deleteProduct(request: Request, response: Response) {
-    const productRepository = getRepository(Product)
+    const productRequest = new ProductServices.DeleteProductService()
     const id: string = request.params.id
     try {
-      const productDelete = await productRepository.findOneOrFail({ id: id })
-      await productRepository.delete(productDelete.id)
+      await productRequest.execute(id)
       return response.status(200).json({ message: `deletado com sucesso ` })
     } catch (err) {
       return response.status(500).json({ message: err })
     }
-  },
+  }
   async getAllProduct(request: Request, response: Response) {
-    const getRepositoryProduct = getRepository(Product)
+    const productRequest = new ProductServices.GetProductSevice()
     try {
-      const findProduct = await getRepositoryProduct.find({
-        relations: ['images', 'company']
-      })
-      
+      const findProduct = await productRequest.execute()
       return response.status(200).json(findProduct)
     } catch (err) {
       return response.status(500).json({ err: err})
     }
-  },
+  }
 
   
   async getProductByCompany(request: Request, response: Response){
-    const getRepositoryProduct = getRepository(Product)
+    const productRequest = new ProductServices.GetCompanyProductService()
     const company_id = request.params.id_company
     
     try{
-      let productCategory = await getRepositoryProduct.find({where:{company: company_id}})
+      let productCategory = await productRequest.execute(company_id)
       return response.status(200).json(productCategory)
     }catch(err){
      return response.status(500).json({er: err})
     }
-  },
+  }
  
 
 }

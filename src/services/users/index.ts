@@ -1,8 +1,8 @@
-import CreateUserService from './CreateUsers'
-import SaveUserService from "./SaveUsers"
-import AuthUserService from "./AuthUsers"
-import ForgotUserSevice from "./ForgotUsers"
-import ResetPasswordUserService from "./ResetPasswordUsers"
+import CreateUserService from './create'
+import SaveUserService from "./save"
+import AuthUserService from "./auth"
+import ForgotUserSevice from "./forgot"
+import ResetPasswordUserService from "./resetPassword"
 const services = {
   CreateUserService,
   SaveUserService,

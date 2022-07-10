@@ -1,10 +1,13 @@
 import { Router } from 'express';
-import isAuthenticated from './middleware/alphaUser'
 import userRouters from './router/users/UserRouters';
+import companyRouters from './router/company/CompanyRouters';
+import productRouters from './router/product/ProductRouters';
+import orderRouters from './router/order/OrderRouters';
 const routes = Router();
 routes.use('/user', userRouters)
-
-
+routes.use('/company', companyRouters)
+routes.use('/products', productRouters)
+routes.use('/order', orderRouters)
 
 /*routes.get('/product/category/:category', ControllerProduct.getProduct)
 routes.get("/product/all/", ControllerProduct.getAllProduct)

@@ -55,7 +55,7 @@ class UserRepository extends Repository<User>{
     return user
 
   }
-  async authUser(email: string, password: string, conected: string) {
+  async authUser(email: string, password: string, conected: boolean) {
     const findUser = await this.findOneByEmail(email)
 
     if (!await comparePassword(password, findUser.password)) {
