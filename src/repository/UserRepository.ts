@@ -1,20 +1,17 @@
-import { hash } from "bcryptjs"
+import  {passwordHash, comparePassword, createToken}  from "../config/isAuthenticated"
 import { EntityRepository, Repository } from "typeorm"
 import User from "../entities/User"
-import crypto from 'crypto'
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcryptjs'
-import TransporteEmail from '../middleware/mailer'
+
+import transportEmail from '../middleware/mailer'
 import { UserInterface } from "../base-interfaces/user.interface"
 
 @EntityRepository(User)
 class UserRepository extends Repository<User>{
   async createAndSave(user: UserInterface) {
-    const passwordHash = await hash(user.password, 10)
-    user.password = passwordHash
+    user.password = await passwordHash(user.password)
     const newUser = this.create(user)
     await this.save(newUser)
-    return user
+    return newUser
   }
 
   async resetPassword(email: string, token: string, password: string) {
@@ -27,7 +24,7 @@ class UserRepository extends Repository<User>{
 
     if (now > user.passwordResetExpire)
       throw new Error('Token expired')
-    user.password = await hash(password, 10)
+    user.password = await passwordHash(password)
     await this.save(user)
     return user
 
@@ -35,7 +32,7 @@ class UserRepository extends Repository<User>{
 
   async forgot(email: string) {
     const findUser = await this.findOneByEmail(email)
-    const token = await crypto.randomBytes(20).toString('hex')
+    const token = await createToken(findUser.id)
     const now = new Date()
     now.setHours(now.getHours() + 1)
     await this.update(findUser.id, {
@@ -43,7 +40,7 @@ class UserRepository extends Repository<User>{
       passwordResetExpire: now
     })
 
-    await TransporteEmail.transporte(email, token)
+    await transportEmail.transporte(email, token)
     return { sucess: 'token enviado' }
   }
   async updateUser(user: UserInterface, id: string) {
@@ -58,16 +55,14 @@ class UserRepository extends Repository<User>{
     return user
 
   }
-  async authUser(email: string, password: string, conected: string) {
+  async authUser(email: string, password: string, conected: boolean) {
     const findUser = await this.findOneByEmail(email)
 
-    if (!await bcrypt.compare(password, findUser.password)) {
+    if (!await comparePassword(password, findUser.password)) {
       throw new Error('Invalid password')
     }
-    const token = jwt.sign({ id: findUser.id }, '647431b5ca55b04fdf3c2fce31ef1915', {
-      expiresIn: conected ? 1892160000000 : 86400
-    })
-    return { user: findUser, token: token }
+    const token = createToken(findUser.id, conected)
+    return Object.assign({},findUser, token )
 
   }
 }

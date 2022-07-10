@@ -9,7 +9,7 @@ export interface OrderInterface {
   priceTotal: number;
   company: CompanyInterface;
   createdAt: Date
-  productOrder: ProductOrderInterface[];
+  productOrder?: ProductOrderInterface[];
 
 
 

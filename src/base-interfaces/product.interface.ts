@@ -6,8 +6,7 @@ export interface ProductInterface {
   name: string;
   price: number;
   category: string;
-  images: ImagesInteface[];
+  images: ImagesInteface;
   company: CompanyInterface;
-  productOrders: ProductOrderInterface[]
 
 }
