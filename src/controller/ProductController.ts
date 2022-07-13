@@ -39,7 +39,6 @@ export default class ProductController {
     } catch (err) {
       return response.status(500).json({ message: err })
     }
-
   }
   async deleteProduct(request: Request, response: Response) {
     const productRequest = new ProductServices.DeleteProductService()
