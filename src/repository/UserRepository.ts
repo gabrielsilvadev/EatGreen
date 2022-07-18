@@ -61,8 +61,9 @@ class UserRepository extends Repository<User>{
     if (!await comparePassword(password, findUser.password)) {
       throw new Error('Invalid password')
     }
-    const token = createToken(findUser.id, conected)
-    return Object.assign({},findUser, token )
+    const token = await createToken(findUser.id, conected)
+    findUser.token = token
+    return findUser
 
   }
 }

@@ -10,9 +10,10 @@ import jwt from "jsonwebtoken"
        return password
     }
     export async function createToken(id: string, conected?: boolean){
-      const token = jwt.sign(id, "fjhdkfhgkdhfgkdk", {
-        expiresIn: conected ? 1892160000000 : 86400
-      })
+      const token = await jwt.sign({
+        exp: conected ? 12535463648 : Math.floor(Date.now() / 1000) + (60 * 60),
+        data: id
+      }, 'ryefs');
       return token
     }
    
