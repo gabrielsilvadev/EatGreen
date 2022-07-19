@@ -13,7 +13,7 @@ import jwt from "jsonwebtoken"
       const token = await jwt.sign({
         exp: conected ? 12535463648 : Math.floor(Date.now() / 1000) + (60 * 60),
         data: id
-      }, 'ryefs');
+      }, '647431b5ca55b04fdf3c2fce31ef1915');
       return token
     }
    

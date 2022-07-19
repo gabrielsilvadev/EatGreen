@@ -4,12 +4,12 @@ import transportEmail from '../middleware/mailer';
 import { createToken } from '../config/isAuthenticated';
 import { comparePassword, passwordHash } from '../config/isAuthenticated';
 import { CompanyInterface } from '../base-interfaces/company.interface';
+
 @EntityRepository(Company)
 class CompanyRepository extends Repository<Company> {
-  async create(company: CompanyInterface) {
-    const saveCompany = this.create(company);
-
-    const token = createToken(saveCompany.id);
+  async Create(company: CompanyInterface) {
+    const saveCompany = await this.create(company);
+    const token = await createToken(saveCompany.id);
 
     await this.save(saveCompany);
 
@@ -33,7 +33,8 @@ class CompanyRepository extends Repository<Company> {
     if (await comparePassword(password, findCompany.password)) {
       throw new Error('Invalid password');
     }
-    const token = createToken(findCompany.id, conected);
+    const token = await createToken(findCompany.id, conected);
+   
     return { user: findCompany, token: token };
   }
 

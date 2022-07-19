@@ -5,7 +5,7 @@ import { getCustomRepository } from "typeorm"
 class CreateCompanyService {
   async execute(product: ProductInterface): Promise<{}> {
     const productRepository = getCustomRepository(ProductRepository)
-    return await productRepository.create(product)
+    return await productRepository.Create(product)
   }
 }
 
