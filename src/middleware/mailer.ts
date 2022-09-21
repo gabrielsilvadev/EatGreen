@@ -3,11 +3,11 @@ import { send } from "process";
 
 export default  {
     async transporte(email: string, token: string){
-    let testAccount = await nodemailer.createTestAccount();
+   await nodemailer.createTestAccount();
     let transporte = nodemailer.createTransport({
-      //host: 'smtp.ethereal.email',
-      //port: 587,
-      //secure: false,
+      host: "smtp.ethereal.email",
+    port: 587,
+    secure: false,
       service: 'Gmail', 
       auth: {
         user: 'sr.lobak@gmail.com',
@@ -24,6 +24,3 @@ export default  {
     console.log(info.messageId, info.envelope)
   }
 }
-
-
-

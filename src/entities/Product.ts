@@ -37,9 +37,10 @@ export default class Product {
   @JoinColumn({ name: 'id_product' })
   productOrders: ProductOrders[]
 
-  constructor(id: string, name: string, price: number, image: Images[]) {
+  constructor(id: string, name: string, price: number,category: string, image: Images[]) {
     this.id = id
     this.name = name
+    this.category = category
     this.price = price
     this.images = image
   }

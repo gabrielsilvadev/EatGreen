@@ -6,8 +6,9 @@ const userController = new controller.UserController()
 
 userRouters.post("/create", userController.create)
 userRouters.patch("/save",isAuthenticated , userController.save)
+userRouters.get("/validation", isAuthenticated, userController.validation)
 userRouters.post("/auth", userController.auth)
 userRouters.post("/forgot", userController.forgot)
-userRouters.post("resetPassword", userController.resetPassword)
+userRouters.post("/resetPassword", userController.resetPassword)
 
 export default userRouters

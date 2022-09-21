@@ -11,6 +11,9 @@ export default class UserController {
       throw new Error(`Dados inválidos: ${err}`)
     }
   }
+  validation(request: Request, response: Response){
+   return response.send({ok: true, idUser: request.body.idUser})
+  }
   async save(request: Request, response: Response): Promise<Response>{
    try{
      const userData =request.body
@@ -23,9 +26,9 @@ export default class UserController {
   }
   async auth(request: Request, response: Response): Promise<Response>{
     try{
-      const userData =request.body
+     console.log(request.body)
       const saveUser = new UserServices.AuthUserService()
-      const user = await saveUser.execute(userData.email, userData.password, userData.conected)
+      const user = await saveUser.execute( request.body.email,  request.body.password,  request.body.conected)
        return response.status(200).json(user)
    } catch (err) {
      throw new Error(`Login Invalido: ${err}`)

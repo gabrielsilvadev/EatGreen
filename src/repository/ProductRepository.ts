@@ -6,7 +6,7 @@ import { ProductInterface } from '../base-interfaces/product.interface';
 @EntityRepository(Product)
 export default class ProductRepository extends Repository<Product> {
 
-  async create(product: ProductInterface) {
+  async Create(product: ProductInterface) {
     const createProduct = this.create(product)
     return  await this.save(createProduct)
  
