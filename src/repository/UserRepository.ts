@@ -31,6 +31,7 @@ class UserRepository extends Repository<User>{
   }
 
   async forgot(email: string) {
+    console.log(email)
     const findUser = await this.findOneByEmail(email)
     const token = await createToken(findUser.id)
     const now = new Date()
@@ -48,6 +49,15 @@ class UserRepository extends Repository<User>{
     return UpdateByUser
 
   }
+
+  async findOneById(id: string) {
+    const user = await this.findOne({ where: { id } })
+    if (!user)
+      throw new Error('User not exists')
+    return user
+
+  }
+
   async findOneByEmail(email: string) {
     const user = await this.findOne({ where: { email } })
     if (!user)

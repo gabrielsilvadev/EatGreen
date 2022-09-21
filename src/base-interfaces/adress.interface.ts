@@ -5,5 +5,7 @@ export interface AdressInterface {
   complement: string;
   city: string;
   states: string;
+  number: number,
+  idUser: string,
   user: UserInterface;
 }

@@ -15,18 +15,18 @@ export default class Adress {
 
   @Column()
   complement: string;
+  
+  @Column()
+  number: number;
 
   @Column()
   city: string;
 
   @Column()
   states: string;
-
-  @ManyToOne(() => User, user => user, {
-    cascade: ['insert', 'update']
-  })
-  @JoinColumn({ name: 'id_user' })
-  user?: User;
+  @ManyToOne(() => User, user => user)
+  @JoinColumn()
+  user: User;
 
 
 }

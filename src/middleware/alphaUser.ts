@@ -19,8 +19,7 @@ export default  (request: Request,response: Response,next: NextFunction)=>{
 
    jwt.verify(token,auth.secret,(err: any,decoded: any)=>{
      if (err) return response.status(401).send({error:'Token invalido'})
-     request.body.userId = decoded.id
-    
+     request.body.idUser = decoded.data
      return next()
    })
 

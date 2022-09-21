@@ -9,19 +9,19 @@ export default class ProductController {
     const company = new CompanyServices.FindCompanyService()
     const productRequest = new ProductServices.CreateProductService()
     const requestImage = request.files as Express.Multer.File[];
-    console.log(request.body)
+ 
     const findCompany = await company.execute(request.params.id)
     const images = requestImage.map(image => {
-      return { path:  fs.readFileSync(image.path, "base64") }
+      return { path:  image.buffer.toString('base64') }
     
     });
-
+   
     const createObjectProduct = {
       name: request.body.name,
       price: request.body.price,
       category: request.body.category,
       company: findCompany,
-      images: images[0]
+      images: images
     }
     try {
      const newProduct = await  productRequest.execute(createObjectProduct)

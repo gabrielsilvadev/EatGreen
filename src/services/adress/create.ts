@@ -5,7 +5,7 @@ import { getCustomRepository } from "typeorm"
 class CreateAdressService {
   async execute(adress: AdressInterface): Promise<AdressInterface> {
     const adressRepository = getCustomRepository(AdressRepository)
-    return await adressRepository.create(adress)
+    return await adressRepository.Create(adress)
   }
 }
 

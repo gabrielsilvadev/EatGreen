@@ -1,9 +1,13 @@
 import AdressService from '../services/adress'
+import UserServices from '../services/users'
 import {Request, Response} from "express"
-export default class OrderController {
+export default class AdressController {
   async create(request: Request, response: Response){
      const AdressRequest = new AdressService.CreateAdressService()
+     const UserRequest  = new  UserServices.FindService()
      try {
+      const user = await UserRequest.execute(request.body.idUser)
+      request.body.user = user
       const adress = await AdressRequest.execute(request.body)
       return response.status(201).json(adress)
     } catch (err) {
@@ -25,5 +29,11 @@ export default class OrderController {
     const AdressRequest = new AdressService.SaveAdressService()
     await AdressRequest.execute(request.params.id, request.body)
     return response.status(200).send()
+  }
+
+  async find(request: Request, response: Response){
+    const AdressRequest = new AdressService.FindAdressService()
+    const adress =  await AdressRequest.execute(request.body.idUser)
+    return response.status(200).send(adress)
   }
 }

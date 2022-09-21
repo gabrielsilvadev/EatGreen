@@ -4,7 +4,7 @@ import { getCustomRepository } from "typeorm"
 class DeleteService {
   async execute(id: string): Promise<{}> {
     const adressRepository = getCustomRepository(AdressRepository)
-    return await adressRepository.delete(id)
+    return await adressRepository.Delete(id)
   }
 }
 

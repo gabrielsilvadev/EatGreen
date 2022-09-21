@@ -5,7 +5,7 @@ import isAuthenticated  from "../../middleware/alphaUser"
 import uploadConfig from '../../config/config'
 const productRouters = Router()
 const productController = new controller.ProductController
-const upload = multer(uploadConfig);
+const upload = multer();
 productRouters.post("/create", upload.array('images') ,isAuthenticated, productController.create)
 productRouters.patch("/delete/:id",isAuthenticated , productController.deleteProduct)
 productRouters.get("/", productController.getAllProduct)
